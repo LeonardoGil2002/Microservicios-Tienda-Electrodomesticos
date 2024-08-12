@@ -15,5 +15,6 @@ public class CartDTO {
     private Long id;
     private List<ProductDTO> product_list;
     private Double total;
+    private Boolean status;
     private Boolean isCartLinkedToSale;
 }

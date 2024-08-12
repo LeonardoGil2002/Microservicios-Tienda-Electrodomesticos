@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
-@FeignClient(name = "cartapi", url = "localhost:8081")
+@FeignClient(name = "cart-service")
 public interface CartAPIClient {
     @GetMapping("/carts/get/{id}")
     public CartDTO findCart(@PathVariable Long id);

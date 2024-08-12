@@ -5,6 +5,8 @@ import com.todocodeacademy.cart_service.dto.ProductDTO;
 import com.todocodeacademy.cart_service.model.Cart;
 import com.todocodeacademy.cart_service.repository.ICartRepository;
 import com.todocodeacademy.cart_service.repository.ProductAPIClient;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,11 @@ public class CartService implements ICartService{
     @Autowired
     private ProductAPIClient productapi;
 
+    private final CartDTO cartError = new CartDTO(0L, null, null, null, null);
+
     @Override
+    @CircuitBreaker(name="products-service",fallbackMethod="fallbackCartList")
+    @Retry(name="products-service")
     public List<CartDTO> getCarts() {
 
         List<Cart> cart_list = cartRep.getEnabledCarts();
@@ -55,6 +61,8 @@ public class CartService implements ICartService{
     }
 
     @Override
+    @CircuitBreaker(name="products-service",fallbackMethod="fallbackCart")
+    @Retry(name="products-service")
     public CartDTO findCart(Long id) {
 
         Cart cart = cartRep.findById(id).orElse(null);
@@ -109,6 +117,8 @@ public class CartService implements ICartService{
     }
 
     @Override
+    @CircuitBreaker(name="products-service",fallbackMethod="fallbackString")
+    @Retry(name="products-service")
     public String saveCart(Cart cart) {
 
         Double total = 0.00;
@@ -117,7 +127,7 @@ public class CartService implements ICartService{
 
             ProductDTO productdto = productapi.findProduct(i);
 
-            if(productapi.findProduct(i)==null){
+            if(productdto==null || !productdto.getStatus()){
                 return "ERROR: The product " + i + " doesn't exist";
             }
 
@@ -134,6 +144,8 @@ public class CartService implements ICartService{
     }
 
     @Override
+    @CircuitBreaker(name="products-service",fallbackMethod="fallbackString")
+    @Retry(name="products-service")
     public String editCart(Cart cart, Long id) {
 
         Cart c = cartRep.findById(id).orElse(null);
@@ -176,6 +188,8 @@ public class CartService implements ICartService{
     }
 
     @Override
+    @CircuitBreaker(name="products-service",fallbackMethod="fallbackString")
+    @Retry(name="products-service")
     public String addProductCart(Long cart_id, Long product_id) {
 
         Cart cart = cartRep.findById(cart_id).orElse(null);
@@ -188,7 +202,7 @@ public class CartService implements ICartService{
 
             ProductDTO productdto = productapi.findProduct(product_id);
 
-            if (productapi.findProduct(product_id) == null) {
+            if (productdto == null || !productdto.getStatus()) {
                 return "ERROR: The product " + product_id + " doesn't exist";
             }
 
@@ -210,6 +224,8 @@ public class CartService implements ICartService{
     }
 
     @Override
+    @CircuitBreaker(name="products-service",fallbackMethod="fallbackString")
+    @Retry(name="products-service")
     public String deleteProductCart(Long cart_id, Long product_id) {
 
         Cart cart = cartRep.findById(cart_id).orElse(null);
@@ -222,7 +238,7 @@ public class CartService implements ICartService{
 
             ProductDTO productdto = productapi.findProduct(product_id);
 
-            if (productapi.findProduct(product_id) == null) {
+            if (productdto == null || !productdto.getStatus()) {
                 return "ERROR: The product " + product_id + " doesn't exist";
             }
 
@@ -273,4 +289,31 @@ public class CartService implements ICartService{
 
         cartRep.save(cart);
     }
+
+    public List<CartDTO> fallbackCartList(Throwable throwable){
+
+        System.err.println("Error: " + throwable.getMessage());
+        List<CartDTO> cart_list_error = new ArrayList<>();
+        cart_list_error.add(cartError);
+
+        return cart_list_error;
+
+    }
+
+    public CartDTO fallbackCart(Throwable throwable){
+
+        System.err.println("Error: " + throwable.getMessage());
+
+        return cartError;
+
+    }
+
+    public String fallbackString(Throwable throwable){
+
+        System.err.println("Error: " + throwable.getMessage());
+
+        return "Error: " + throwable.getMessage();
+
+    }
+
 }

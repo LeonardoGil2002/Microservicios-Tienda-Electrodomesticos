@@ -3,6 +3,7 @@ package com.todocodeacademy.products_service.controller;
 import com.todocodeacademy.products_service.model.Product;
 import com.todocodeacademy.products_service.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class ProductController {
     @Autowired
     private IProductService prodSer;
 
+    @Value("${server.port}")
+    private int serverPort;
+
     @GetMapping("/get")
     public List<Product> getProducts(){
         return prodSer.getProducts();
@@ -21,6 +25,9 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     public Product findProduct(@PathVariable Long id){
+        //Load Balancer test
+        //System.out.println("I am using the port "+serverPort);
+
         return prodSer.findProduct(id);
     }
 

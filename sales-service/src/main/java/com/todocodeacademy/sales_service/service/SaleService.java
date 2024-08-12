@@ -5,6 +5,8 @@ import com.todocodeacademy.sales_service.dto.SaleDTO;
 import com.todocodeacademy.sales_service.model.Sale;
 import com.todocodeacademy.sales_service.repository.CartAPIClient;
 import com.todocodeacademy.sales_service.repository.ISaleRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,11 @@ public class SaleService implements ISaleService{
     @Autowired
     private CartAPIClient cartapi;
 
+    private final SaleDTO saleError = new SaleDTO(0L, null, null, null, null, null);
+
     @Override
+    @CircuitBreaker(name="cart-service", fallbackMethod = "fallbackSaleList")
+    @Retry(name="cart-service")
     public List<SaleDTO> getSales() {
 
         List<Sale> sale_list = salRep.getEnabledSales();
@@ -30,6 +36,10 @@ public class SaleService implements ISaleService{
 
             SaleDTO saleDTO = new SaleDTO();
             CartDTO cartDTO = cartapi.findCart(s.getCart_id());
+
+            if(cartDTO.getId()==0){
+                throw new RuntimeException("Runtime Exception");
+            }
 
             saleDTO.setId(s.getId());
             saleDTO.setDate(s.getDate());
@@ -47,6 +57,8 @@ public class SaleService implements ISaleService{
     }
 
     @Override
+    @CircuitBreaker(name="cart-service", fallbackMethod = "fallbackSale")
+    @Retry(name="cart-service")
     public SaleDTO findSale(Long id) {
 
         Sale s = salRep.findById(id).orElse(null);
@@ -54,6 +66,10 @@ public class SaleService implements ISaleService{
         if(s!=null){
             SaleDTO saleDTO = new SaleDTO();
             CartDTO cartDTO = cartapi.findCart(s.getCart_id());
+
+            if(cartDTO.getId()==0){
+                throw new RuntimeException("Runtime Exception");
+            }
 
             saleDTO.setId(s.getId());
             saleDTO.setDate(s.getDate());
@@ -70,11 +86,17 @@ public class SaleService implements ISaleService{
     }
 
     @Override
+    @CircuitBreaker(name="cart-service", fallbackMethod = "fallbackString")
+    @Retry(name="cart-service")
     public String saveSale(Sale sale) {
 
         CartDTO cart = cartapi.findCart(sale.getCart_id());
 
-        if(cart==null){
+        if(cart.getId()==0){
+            throw new RuntimeException("Runtime Exception");
+        }
+
+        if(cart==null || !cart.getStatus()){
             return "The cart assigned doesn't exist";
         }
 
@@ -94,17 +116,23 @@ public class SaleService implements ISaleService{
     }
 
     @Override
+    @CircuitBreaker(name="cart-service", fallbackMethod = "fallbackString")
+    @Retry(name="cart-service")
     public String editSale(Sale sale, Long id) {
 
         CartDTO cart = cartapi.findCart(sale.getCart_id());
 
         Sale sal = salRep.findById(id).orElse(null);
 
+        if(cart.getId()==0){
+            throw new RuntimeException("Runtime Exception");
+        }
+
         if(sal==null){
             return "The sale doesn't exist";
         }
 
-        if(cart==null){
+        if(cart==null || !cart.getStatus()){
             return "The cart assigned doesn't exist";
         }
 
@@ -144,4 +172,25 @@ public class SaleService implements ISaleService{
 
         return "Sale deleted successfully";
     }
+
+    public List<SaleDTO> fallbackSaleList(Throwable throwable){
+
+        System.err.println("Error: " + throwable.getMessage());
+
+        List<SaleDTO> sale_error_list = new ArrayList<>();
+        sale_error_list.add(saleError);
+        return sale_error_list;
+
+    }
+
+    public SaleDTO fallbackSale(Throwable throwable){
+        System.err.println("Error: " + throwable.getMessage());
+        return saleError;
+    }
+
+    public String fallbackString(Throwable throwable){
+        System.err.println("Error: " + throwable.getMessage());
+        return "Error: " + throwable.getMessage();
+    }
+
 }
