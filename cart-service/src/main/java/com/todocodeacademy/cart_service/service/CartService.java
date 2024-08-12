@@ -35,6 +35,7 @@ public class CartService implements ICartService{
             cartDTO.setId(c.getId());
             cartDTO.setStatus(c.getStatus());
             cartDTO.setTotal(c.getTotal());
+            cartDTO.setIsCartLinkedToSale(c.getIsCartLinkedToSale());
 
             for(Long i : c.getProduct_list()){
 
@@ -66,6 +67,7 @@ public class CartService implements ICartService{
             cartDTO.setId(cart.getId());
             cartDTO.setStatus(cart.getStatus());
             cartDTO.setTotal(cart.getTotal());
+            cartDTO.setIsCartLinkedToSale(cart.getIsCartLinkedToSale());
 
             for (Long i : cart.getProduct_list()) {
 
@@ -83,9 +85,18 @@ public class CartService implements ICartService{
     }
 
     @Override
+    public List<Long> findCartProductsId(Long cart_id){
+        return cartRep.findById(cart_id).orElse(null).getProduct_list();
+    }
+
+    @Override
     public String deleteCart(Long id) {
 
         Cart cart = cartRep.findById(id).orElse(null);
+
+        if(cart.getIsCartLinkedToSale()){
+            return "The cart cannot be deleted because it is linked to a sale";
+        }
 
         if(cart!=null){
             cart.setStatus(false);
@@ -116,6 +127,7 @@ public class CartService implements ICartService{
 
         cart.setTotal(total);
         cart.setStatus(true);
+        cart.setIsCartLinkedToSale(false);
 
         cartRep.save(cart);
         return "Cart saved successfully";
@@ -126,31 +138,41 @@ public class CartService implements ICartService{
 
         Cart c = cartRep.findById(id).orElse(null);
 
-        if(c!=null){
-            cart.setId(id);
+        if (c != null) {
 
-            Double total = 0.00;
+            if(!c.getIsCartLinkedToSale()) {
 
-            for (Long i : cart.getProduct_list()) {
+                cart.setId(id);
 
-                ProductDTO productdto = productapi.findProduct(i);
+                Double total = 0.00;
 
-                if(productapi.findProduct(i)==null){
-                    return "ERROR: The product " + i + " doesn't exist";
+                for (Long i : cart.getProduct_list()) {
+
+                    ProductDTO productdto = productapi.findProduct(i);
+
+                    if (productapi.findProduct(i) == null) {
+                        return "ERROR: The product " + i + " doesn't exist";
+                    }
+
+                    total += productdto.getPrice();
+
                 }
 
-                total += productdto.getPrice();
+                cart.setTotal(total);
+                cart.setStatus(c.getStatus());
+                cart.setIsCartLinkedToSale(c.getIsCartLinkedToSale());
+
+                cartRep.save(cart);
+                return "Cart edited successfully";
 
             }
 
-            cart.setTotal(total);
-            cart.setStatus(c.getStatus());
+            return "The cart cannot be edited because it is linked to a sale";
 
-            cartRep.save(cart);
-            return "Cart edited successfully";
         }
 
         return "The cart doesn't exist";
+
     }
 
     @Override
@@ -162,22 +184,28 @@ public class CartService implements ICartService{
             return "The cart doesn't exist";
         }
 
-        ProductDTO productdto = productapi.findProduct(product_id);
+        if(!cart.getIsCartLinkedToSale()) {
 
-        if(productapi.findProduct(product_id)==null){
-            return "ERROR: The product " + product_id + " doesn't exist";
+            ProductDTO productdto = productapi.findProduct(product_id);
+
+            if (productapi.findProduct(product_id) == null) {
+                return "ERROR: The product " + product_id + " doesn't exist";
+            }
+
+            List<Long> product_list = cart.getProduct_list();
+
+            product_list.add(product_id);
+
+            cart.setProduct_list(product_list);
+            cart.setTotal(cart.getTotal() + productdto.getPrice());
+
+            cartRep.save(cart);
+
+            return "The product was added successfully";
+
         }
 
-        List<Long> product_list = cart.getProduct_list();
-
-        product_list.add(product_id);
-
-        cart.setProduct_list(product_list);
-        cart.setTotal(cart.getTotal() + productdto.getPrice());
-
-        cartRep.save(cart);
-
-        return "The product was added successfully";
+        return "The cart cannot be edited because it is linked to a sale";
 
     }
 
@@ -190,25 +218,59 @@ public class CartService implements ICartService{
             return "The cart doesn't exist";
         }
 
-        ProductDTO productdto = productapi.findProduct(product_id);
+        if(!cart.getIsCartLinkedToSale()) {
 
-        if(productapi.findProduct(product_id)==null){
-            return "ERROR: The product " + product_id + " doesn't exist";
+            ProductDTO productdto = productapi.findProduct(product_id);
+
+            if (productapi.findProduct(product_id) == null) {
+                return "ERROR: The product " + product_id + " doesn't exist";
+            }
+
+            List<Long> product_list = cart.getProduct_list();
+
+            if (product_list.remove(product_id)) {
+
+                cart.setProduct_list(product_list);
+                cart.setTotal(cart.getTotal() - productdto.getPrice());
+                cartRep.save(cart);
+
+                return "Product removed successfully";
+
+            }
+
+            return "The product doesn't exist in the cart selected";
+
         }
 
-        List<Long> product_list = cart.getProduct_list();
+        return "The cart cannot be edited because it is linked to a sale";
 
-        if(product_list.remove(product_id)){
+    }
 
-            cart.setProduct_list(product_list);
-            cart.setTotal(cart.getTotal() - productdto.getPrice());
-            cartRep.save(cart);
+    @Override
+    public void assignSale(Long cart_id, Long sale_id) {
 
-            return "Product removed successfully";
+        Cart cart = cartRep.findById(cart_id).orElse(null);
 
+        if(cart==null){
+            return;
         }
 
-        return "The product doesn't exist in the cart selected";
+        cart.setIsCartLinkedToSale(true);
 
+        cartRep.save(cart);
+
+    }
+
+    @Override
+    public void unassignSale(Long cart_id) {
+        Cart cart = cartRep.findById(cart_id).orElse(null);
+
+        if(cart==null){
+            return;
+        }
+
+        cart.setIsCartLinkedToSale(false);
+
+        cartRep.save(cart);
     }
 }

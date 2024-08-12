@@ -1,6 +1,5 @@
 package com.todocodeacademy.cart_service.dto;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDTO {
+
     private Long id;
     private List<ProductDTO> product_list;
     private Double total;
     private Boolean status;
+    private Boolean isCartLinkedToSale;
+
 }

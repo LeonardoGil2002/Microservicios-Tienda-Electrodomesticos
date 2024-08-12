@@ -25,6 +25,9 @@ public class CartController {
         return cartServ.findCart(id);
     }
 
+    @GetMapping("/get/productsid/{cart_id}")
+    public List<Long> findCartProductsId(@PathVariable Long cart_id){ return cartServ.findCartProductsId(cart_id);}
+
     @PostMapping("/save")
     public String saveCart(@RequestBody Cart cart){
         return cartServ.saveCart(cart);
@@ -39,6 +42,12 @@ public class CartController {
     public String editCart(@RequestBody Cart cart, @PathVariable Long id){
         return cartServ.editCart(cart, id);
     }
+
+    @PutMapping("/assign/{cart_id}/{sale_id}")
+    public void assignSale(@PathVariable Long cart_id, @PathVariable Long sale_id){ cartServ.assignSale(cart_id, sale_id);}
+
+    @PutMapping("/unassign/{cart_id}")
+    public void unassignSale(@PathVariable Long cart_id) { cartServ.unassignSale(cart_id);}
 
     @PutMapping("/add/{cart_id}/{product_id}")
     public String addProductCart(@PathVariable Long cart_id, @PathVariable Long product_id){

@@ -22,5 +22,6 @@ public class Cart {
     private List<Long> product_list;
     private Double total;
     private Boolean status;
+    private Boolean isCartLinkedToSale;
 
 }
