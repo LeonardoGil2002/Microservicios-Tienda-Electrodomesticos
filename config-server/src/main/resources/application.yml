@@ -1,0 +1,15 @@
+server:
+  port:8079
+
+spring:
+  application:
+    name: config-server
+
+cloud:
+  config:
+    server:
+      git:
+        uri: https://github.com/LeonardoGil2002/Microservicios-Tienda-Electrodomesticos.git
+        searchPaths: config-data
+        username: ${GIT_USER}
+        password: ${GIT_PASSWORD}
