@@ -12,13 +12,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/PRODUCTS-SERVICE/products/get",
+					"raw": "localhost:443/products-service/products/get",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"PRODUCTS-SERVICE",
+						"products-service",
 						"products",
 						"get"
 					]
@@ -32,13 +32,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/PRODUCTS-SERVICE/products/get/1",
+					"raw": "localhost:443/products-service/products/get/1",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"PRODUCTS-SERVICE",
+						"products-service",
 						"products",
 						"get",
 						"1"
@@ -62,13 +62,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:443/PRODUCTS-SERVICE/products/save",
+					"raw": "localhost:443/products-service/products/save",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"PRODUCTS-SERVICE",
+						"products-service",
 						"products",
 						"save"
 					]
@@ -91,13 +91,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:443/PRODUCTS-SERVICE/products/edit/1",
+					"raw": "localhost:443/products-service/products/edit/1",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"PRODUCTS-SERVICE",
+						"products-service",
 						"products",
 						"edit",
 						"1"
@@ -112,13 +112,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/PRODUCTS-SERVICE/products/delete/4",
+					"raw": "localhost:443/products-service/products/delete/4",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"PRODUCTS-SERVICE",
+						"products-service",
 						"products",
 						"delete",
 						"4"
@@ -133,13 +133,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/get",
+					"raw": "localhost:443/cart-service/carts/get",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"get"
 					]
@@ -153,13 +153,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/get/2",
+					"raw": "localhost:443/cart-service/carts/get/2",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"get",
 						"2"
@@ -183,13 +183,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/save",
+					"raw": "localhost:443/cart-service/carts/save",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"save"
 					]
@@ -212,13 +212,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/edit/2",
+					"raw": "localhost:443/cart-service/carts/edit/2",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"edit",
 						"2"
@@ -233,13 +233,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/delete/2",
+					"raw": "localhost:443/cart-service/carts/delete/2",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"delete",
 						"2"
@@ -254,13 +254,13 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/add/1/3",
+					"raw": "localhost:443/cart-service/carts/add/1/3",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"add",
 						"1",
@@ -276,13 +276,13 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/CART-SERVICE/carts/delete/1/3",
+					"raw": "localhost:443/cart-service/carts/delete/1/3",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"CART-SERVICE",
+						"cart-service",
 						"carts",
 						"delete",
 						"1",
@@ -298,13 +298,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/SALES-SERVICE/sales/get",
+					"raw": "localhost:443/sales-service/sales/get",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"SALES-SERVICE",
+						"sales-service",
 						"sales",
 						"get"
 					]
@@ -318,13 +318,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/SALES-SERVICE/sales/get/2",
+					"raw": "localhost:443/sales-service/sales/get/2",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"SALES-SERVICE",
+						"sales-service",
 						"sales",
 						"get",
 						"2"
@@ -348,13 +348,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:443/SALES-SERVICE/sales/save",
+					"raw": "localhost:443/sales-service/sales/save",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"SALES-SERVICE",
+						"sales-service",
 						"sales",
 						"save"
 					]
@@ -377,13 +377,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:443/SALES-SERVICE/sales/edit/1",
+					"raw": "localhost:443/sales-service/sales/edit/1",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"SALES-SERVICE",
+						"sales-service",
 						"sales",
 						"edit",
 						"1"
@@ -398,16 +398,96 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:443/SALES-SERVICE/sales/delete/2",
+					"raw": "localhost:443/sales-service/sales/delete/2",
 					"host": [
 						"localhost"
 					],
 					"port": "443",
 					"path": [
-						"SALES-SERVICE",
+						"sales-service",
 						"sales",
 						"delete",
 						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products service Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:443/config-server/products-service/default",
+					"host": [
+						"localhost"
+					],
+					"port": "443",
+					"path": [
+						"config-server",
+						"products-service",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart Service Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:443/config-server/cart-service/default",
+					"host": [
+						"localhost"
+					],
+					"port": "443",
+					"path": [
+						"config-server",
+						"cart-service",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Service Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:443/config-server/sales-service/default",
+					"host": [
+						"localhost"
+					],
+					"port": "443",
+					"path": [
+						"config-server",
+						"sales-service",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eureka Server Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:443/config-server/eureka-sv/default",
+					"host": [
+						"localhost"
+					],
+					"port": "443",
+					"path": [
+						"config-server",
+						"eureka-sv",
+						"default"
 					]
 				}
 			},
